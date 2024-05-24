@@ -13,7 +13,10 @@ class MainWindow : public QMainWindow
 
 public:
     char who_now='w';
+    char figure_choosen[4];
     std::vector<std::array<char,3>> changed_fields;
+    std::vector<std::array<int,2>> possible_moves;
+
     std::string chessboard[8][8]={ {"br","bk","bb","bq","BK","bb","bk","br"},
                                     {"bp","bp","bp","bp","bp","bp","bp","bp"},
                                     {"e","e","e","e","e","e","e","e"},
@@ -28,6 +31,7 @@ public:
 private:
     Ui::Chess *ui;
     void onAnyButtonClicked();
+    void clearColors();
     std::vector<std::array<int,2>> possibleMoves(int x,int y,char f,char c);
 
 };
