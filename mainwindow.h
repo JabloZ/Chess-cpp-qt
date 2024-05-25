@@ -16,7 +16,8 @@ public:
     char figure_choosen[4];
     std::vector<std::array<char,3>> changed_fields;
     std::vector<std::array<int,2>> possible_moves;
-
+    int b_king_at[2]={0,4};
+    int w_king_at[2]={7,4};
     std::string chessboard[8][8]={ {"br","bk","bb","bq","bK","bb","bk","br"},
                                     {"bp","bp","bp","bp","bp","bp","bp","bp"},
                                     {"e","e","e","e","e","e","e","e"},
@@ -29,6 +30,7 @@ public:
     ~MainWindow();
 
 private:
+    bool is_checked();
     Ui::Chess *ui;
     void onAnyButtonClicked();
     void clearColors();

@@ -19,6 +19,34 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
+bool MainWindow::is_checked(){
+    std::vector<std::array<int,2>> all_moves={};
+    int king_at[2];
+    if (who_now=='b'){
+        king_at[0]=b_king_at[0];
+        king_at[1]=b_king_at[1];}
+    else{
+        king_at[0]=w_king_at[0];
+        king_at[1]=w_king_at[1];
+    }
+
+    std::array<int,2> cur={king_at[0],king_at[1]};
+    for (int i=0;i<=7;i++){
+        for (int j=0; j<=7;j++){
+            if (chessboard[i][j]!="e" && chessboard[i][j].at(0)!=who_now){
+
+                std::vector<std::array<int,2>> where=possibleMoves(i,j,chessboard[i][j].at(1),chessboard[i][j].at(0));
+
+                if (std::find(where.begin(),where.end(),cur)!=where.end()){
+                    std::cout<<"err3";
+                    return true;
+                }
+            }
+        }
+
+    }
+    return false;
+}
 std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char c){
     std::vector<std::array<int,2>> moves;
     switch(f){
@@ -62,8 +90,10 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
 
 
                 }
+
+
         case 'r':
-                std::cout<<"here";
+
             for (int x2=x-1;x2>=0;x2--){ //w gore
                         if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_now){
                             moves.push_back({x2,y});
@@ -105,6 +135,8 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                         else{break;}
             }
             return moves;
+
+
         case 'b':{
             int y2=y;
             for (int x2=x-1;x2>=0;x2--){ //lewo gora
@@ -160,6 +192,8 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                         else{break;}
             }
         }break;
+
+
         case 'q':{
             for (int x2=x-1;x2>=0;x2--){ //w gore
                         if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_now){
@@ -266,9 +300,20 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
             }
             return moves;
         }
+        case 'K':{
+            int possibilities[8][2]={{x-1,y-1},{x-1,y+1},{x-1,y},{x+1,y},{x+1,y+1},{x+1,y-1},{x,y-1},{x,y+1}};
+            for (int x2=0;x2<=7;x2++){
+                        if (possibilities[x2][0]>=0 && possibilities[x2][1]>=0 && possibilities[x2][0]<=7 && possibilities[x2][0]<=7){
+                            if (chessboard[possibilities[x2][0]][possibilities[x2][1]].at(0)!=who_now){
+                                moves.push_back({possibilities[x2][0],possibilities[x2][1]});
+                            }
+                        }
+            }
+            return moves;
+        }
 
         default:
-            std::cout<<"different figure";
+
             break;
     }
 }
@@ -288,7 +333,8 @@ void MainWindow::clearColors(){
     }
 }
 void MainWindow::onAnyButtonClicked() {
-
+    bool res=is_checked();
+    std::cout<<res<<" ";
     //std::cout<<who_now; //background-color: rgb(108, 82, 70);
     clearColors();
     bool change_frame_color=true;
@@ -319,14 +365,26 @@ void MainWindow::onAnyButtonClicked() {
                     QPushButton *buttonc2 = findChild<QPushButton*>(buttonName22);
                     buttonc2->setText(QString::fromStdString(""));
                     change_frame_color=false;
+
+                    possible_moves.clear();
+                    if (who_now=='w'){
+                        if (figure_choosen[2]=='K'){
+                            w_king_at[0]=x;
+                            w_king_at[1]=y;
+
+                        }
+
+                        who_now='b';
+                    }
+                    else{who_now='w';
+                        if (figure_choosen[2]=='K'){
+                            b_king_at[0]=x;
+                            b_king_at[1]=y;
+
+                        }}
                     for (int i=0; i<4; i++){
                         figure_choosen[i]='0';
                     }
-                    possible_moves.clear();
-                    if (who_now=='w'){
-                        who_now='b';
-                    }
-                    else{who_now='w';}
                    }
         }
         if (chessboard[x][y].at(0)==who_now){
@@ -344,7 +402,7 @@ void MainWindow::onAnyButtonClicked() {
                     figure_choosen[3]=chessboard[x][y].at(0);
 
                     for (auto& it : where) {
-                        std::cout <<"|"<< it[0] <<" "<<it[1];
+
                         QString frameName = QString("f%1%2").arg(it[0]).arg(it[1]);
                         QFrame *frame = findChild<QFrame*>(frameName);
                         frame->setStyleSheet("");
