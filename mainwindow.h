@@ -17,7 +17,7 @@ public:
     std::vector<std::array<char,3>> changed_fields;
     std::vector<std::array<int,2>> possible_moves;
 
-    std::string chessboard[8][8]={ {"br","bk","bb","bq","BK","bb","bk","br"},
+    std::string chessboard[8][8]={ {"br","bk","bb","bq","bK","bb","bk","br"},
                                     {"bp","bp","bp","bp","bp","bp","bp","bp"},
                                     {"e","e","e","e","e","e","e","e"},
                                     {"e","e","e","e","e","e","e","e"},

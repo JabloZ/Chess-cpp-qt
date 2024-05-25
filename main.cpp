@@ -94,7 +94,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                         }
                         else{break;}
             }
-            for (int y2=y+1;y2<=7;y2++){ //w lewo
+            for (int y2=y+1;y2<=7;y2++){ //w prawo
                         if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_now){
                             moves.push_back({x,y2});
                             break;
@@ -105,6 +105,168 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                         else{break;}
             }
             return moves;
+        case 'b':{
+            int y2=y;
+            for (int x2=x-1;x2>=0;x2--){ //lewo gora
+
+                        y2--;
+                        if (y2==-1 ||y2==8){break;}
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                            moves.push_back({x2,y2});
+                            break;
+                        }
+                        if (chessboard[x2][y2].at(0)=='e'){
+                            moves.push_back({x2,y2});
+                        }
+                        else{break;}
+            }
+            y2=y;
+            for (int x2=x+1;x2<=7;x2++){ //lewo dol
+                        y2--;
+                        if (y2==-1 ||y2==8){break;}
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                            moves.push_back({x2,y2});
+                            break;
+                        }
+                        if (chessboard[x2][y2].at(0)=='e'){
+                            moves.push_back({x2,y2});
+                        }
+                        else{break;}
+            }
+            y2=y;
+            for (int x2=x-1;x2>=0;x2--){ //lewo dol
+                        y2++;
+                        if (y2==-1 ||y2==8){break;}
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                            moves.push_back({x2,y2});
+                            break;
+                        }
+                        if (chessboard[x2][y2].at(0)=='e'){
+                            moves.push_back({x2,y2});
+                        }
+                        else{break;}
+            }
+            y2=y;
+            for (int x2=x+1;x2<=7;x2++){ //lewo dol
+                        y2++;
+                        if (y2==-1 ||y2==8){break;}
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                            moves.push_back({x2,y2});
+                            break;
+                        }
+                        if (chessboard[x2][y2].at(0)=='e'){
+                            moves.push_back({x2,y2});
+                        }
+                        else{break;}
+            }
+        }break;
+        case 'q':{
+            for (int x2=x-1;x2>=0;x2--){ //w gore
+                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_now){
+                            moves.push_back({x2,y});
+                            break;
+                        }
+                        if (chessboard[x2][y].at(0)=='e'){
+                            moves.push_back({x2,y});
+                        }
+                        else{break;}
+            }
+            for (int x2=x+1;x2<=7;x2++){ //w dol
+                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_now){
+                            moves.push_back({x2,y});
+                            break;
+                        }
+                        if (chessboard[x2][y].at(0)=='e'){
+                            moves.push_back({x2,y});
+                        }
+                        else{break;}
+            }
+            for (int y2=y-1;y2>=0;y2--){ //w lewo
+                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_now){
+                            moves.push_back({x,y2});
+                            break;
+                        }
+                        if (chessboard[x][y2].at(0)=='e'){
+                            moves.push_back({x,y2});
+                        }
+                        else{break;}
+            }
+            for (int y2=y+1;y2<=7;y2++){ //w prawo
+                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_now){
+                            moves.push_back({x,y2});
+                            break;
+                        }
+                        if (chessboard[x][y2].at(0)=='e'){
+                            moves.push_back({x,y2});
+                        }
+                        else{break;}
+            }
+            int y2=y;
+            for (int x2=x-1;x2>=0;x2--){ //lewo gora
+
+                        y2--;
+                        if (y2==-1 ||y2==8){break;}
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                            moves.push_back({x2,y2});
+                            break;
+                        }
+                        if (chessboard[x2][y2].at(0)=='e'){
+                            moves.push_back({x2,y2});
+                        }
+                        else{break;}
+            }
+            y2=y;
+            for (int x2=x+1;x2<=7;x2++){ //lewo dol
+                        y2--;
+                        if (y2==-1 ||y2==8){break;}
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                            moves.push_back({x2,y2});
+                            break;
+                        }
+                        if (chessboard[x2][y2].at(0)=='e'){
+                            moves.push_back({x2,y2});
+                        }
+                        else{break;}
+            }
+            y2=y;
+            for (int x2=x-1;x2>=0;x2--){ //lewo dol
+                        y2++;
+                        if (y2==-1 ||y2==8){break;}
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                            moves.push_back({x2,y2});
+                            break;
+                        }
+                        if (chessboard[x2][y2].at(0)=='e'){
+                            moves.push_back({x2,y2});
+                        }
+                        else{break;}
+            }
+            y2=y;
+            for (int x2=x+1;x2<=7;x2++){ //lewo dol
+                        y2++;
+                        if (y2==-1 ||y2==8){break;}
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                            moves.push_back({x2,y2});
+                            break;
+                        }
+                        if (chessboard[x2][y2].at(0)=='e'){
+                            moves.push_back({x2,y2});
+                        }
+                        else{break;}
+            }
+        }break;
+        case 'k':{
+            int possibilities[8][2]={{x-1,y-2},{x-1,y+2},{x+1,y-2},{x+1,y+2},{x-2,y-1},{x-2,y+1},{x+2,y-1},{x+2,y+1}};
+            for (int x2=0;x2<=7;x2++){
+                        if (possibilities[x2][0]>=0 && possibilities[x2][1]>=0 && possibilities[x2][0]<=7 && possibilities[x2][0]<=7){
+                            if (chessboard[possibilities[x2][0]][possibilities[x2][1]].at(0)!=who_now){
+                                moves.push_back({possibilities[x2][0],possibilities[x2][1]});
+                            }
+                        }
+            }
+            return moves;
+        }
+
         default:
             std::cout<<"different figure";
             break;
