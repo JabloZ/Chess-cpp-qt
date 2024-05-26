@@ -22,32 +22,46 @@ int main(int argc, char *argv[])
 bool MainWindow::is_checked(){
     std::vector<std::array<int,2>> all_moves={};
     int king_at[2];
-    if (who_now=='b'){
-        king_at[0]=b_king_at[0];
-        king_at[1]=b_king_at[1];}
-    else{
+    char who_is_my_color='0';
+    if (who_now=='w'){
         king_at[0]=w_king_at[0];
         king_at[1]=w_king_at[1];
+        char who_is_my_color='b';
+    }
+    else{
+        char who_is_my_color='w';
+        king_at[0]=b_king_at[0];
+        king_at[1]=b_king_at[1];
     }
 
+    std::cout<<chessboard[king_at[0]][king_at[1]];
     std::array<int,2> cur={king_at[0],king_at[1]};
     for (int i=0;i<=7;i++){
         for (int j=0; j<=7;j++){
-            if (chessboard[i][j]!="e" && chessboard[i][j].at(0)!=who_now){
+            if (chessboard[i][j].at(0)!='e' && chessboard[i][j].at(0)!=who_now){
 
-                std::vector<std::array<int,2>> where=possibleMoves(i,j,chessboard[i][j].at(1),chessboard[i][j].at(0));
+                std::vector<std::array<int,2>> where=possibleMoves(i,j,chessboard[i][j].at(1),chessboard[i][j].at(0),who_is_my_color);
 
+                for (auto& k:where){
+                    std::cout<<"|"<<"RUCH "<<who_now<<k[0]<<" "<<k[1]<<","<<king_at[0]<<" "<<king_at[1]<<chessboard[i][j].at(1)<<"|";
+
+
+                }
                 if (std::find(where.begin(),where.end(),cur)!=where.end()){
                     std::cout<<"err3";
+
                     return true;
                 }
+
             }
+
         }
 
     }
+    std::cout<<"\N KONIEC WEKTORA JUZ NIE MA TUTAJ |||||||||| ";
     return false;
 }
-std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char c){
+std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char c, char who_is_my_color){
     std::vector<std::array<int,2>> moves;
     switch(f){
         case 'p':
@@ -62,10 +76,10 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                     if (chessboard[x-1][y].at(0)=='e'){
                         moves.push_back({x-1,y});
                     }
-                    if ((y-1)>=0 && chessboard[x-1][y-1].at(0)!=who_now && chessboard[x-1][y-1].at(0)!='e' && chessboard[x-1][y-1].at(1)!='K'){ //w lewy gorny
+                    if ((y-1)>=0 && chessboard[x-1][y-1].at(0)!=who_is_my_color && chessboard[x-1][y-1].at(0)!='e' ){ //w lewy gorny
                         moves.push_back({x-1,y-1});
                     }
-                    if ((y+1)<8 &&chessboard[x-1][y+1].at(0)!=who_now && chessboard[x-1][y+1].at(0)!='e' && chessboard[x-1][y+1].at(1)!='K'){ //w prawy gorny
+                    if ((y+1)<8 &&chessboard[x-1][y+1].at(0)!=who_is_my_color && chessboard[x-1][y+1].at(0)!='e'){ //w prawy gorny
                         moves.push_back({x-1,y+1});
                     }
                     return moves;
@@ -80,10 +94,10 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                     if (chessboard[x+1][y].at(0)=='e'){
                         moves.push_back({x+1,y});
                     }
-                    if ((y-1)>=0 && chessboard[x+1][y-1].at(0)!=who_now && chessboard[x+1][y-1].at(0)!='e'  && chessboard[x+1][y-1].at(1)!='K'){ //w lewy gorny
+                    if ((y-1)>=0 && chessboard[x+1][y-1].at(0)!=who_is_my_color && chessboard[x+1][y-1].at(0)!='e'){ //w lewy gorny
                         moves.push_back({x+1,y-1});
                     }
-                    if ((y+1)<8 && chessboard[x+1][y+1].at(0)!=who_now && chessboard[x+1][y+1].at(0)!='e'  && chessboard[x+1][y+1].at(1)!='K'){ //w prawy gorny
+                    if ((y+1)<8 && chessboard[x+1][y+1].at(0)!=who_is_my_color && chessboard[x+1][y+1].at(0)!='e'){ //w prawy gorny
                         moves.push_back({x+1,y+1});
                     }
                     return moves;
@@ -95,7 +109,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
         case 'r':
 
             for (int x2=x-1;x2>=0;x2--){ //w gore
-                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_now){
+                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_is_my_color){
                             moves.push_back({x2,y});
                             break;
                         }
@@ -105,7 +119,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                             else{break;}
             }
             for (int x2=x+1;x2<=7;x2++){ //w dol
-                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_now){
+                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_is_my_color){
                             moves.push_back({x2,y});
                             break;
                         }
@@ -115,7 +129,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                         else{break;}
             }
             for (int y2=y-1;y2>=0;y2--){ //w lewo
-                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_now){
+                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_is_my_color){
                             moves.push_back({x,y2});
                             break;
                         }
@@ -125,7 +139,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                         else{break;}
             }
             for (int y2=y+1;y2<=7;y2++){ //w prawo
-                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_now){
+                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_is_my_color){
                             moves.push_back({x,y2});
                             break;
                         }
@@ -143,7 +157,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
 
                         y2--;
                         if (y2==-1 ||y2==8){break;}
-                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_is_my_color){
                             moves.push_back({x2,y2});
                             break;
                         }
@@ -156,7 +170,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
             for (int x2=x+1;x2<=7;x2++){ //lewo dol
                         y2--;
                         if (y2==-1 ||y2==8){break;}
-                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_is_my_color){
                             moves.push_back({x2,y2});
                             break;
                         }
@@ -169,7 +183,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
             for (int x2=x-1;x2>=0;x2--){ //lewo dol
                         y2++;
                         if (y2==-1 ||y2==8){break;}
-                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_is_my_color){
                             moves.push_back({x2,y2});
                             break;
                         }
@@ -182,7 +196,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
             for (int x2=x+1;x2<=7;x2++){ //lewo dol
                         y2++;
                         if (y2==-1 ||y2==8){break;}
-                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_is_my_color){
                             moves.push_back({x2,y2});
                             break;
                         }
@@ -196,7 +210,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
 
         case 'q':{
             for (int x2=x-1;x2>=0;x2--){ //w gore
-                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_now){
+                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_is_my_color){
                             moves.push_back({x2,y});
                             break;
                         }
@@ -206,7 +220,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                         else{break;}
             }
             for (int x2=x+1;x2<=7;x2++){ //w dol
-                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_now){
+                        if (chessboard[x2][y].at(0)!='e' && chessboard[x2][y].at(0)!=who_is_my_color){
                             moves.push_back({x2,y});
                             break;
                         }
@@ -216,7 +230,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                         else{break;}
             }
             for (int y2=y-1;y2>=0;y2--){ //w lewo
-                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_now){
+                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_is_my_color){
                             moves.push_back({x,y2});
                             break;
                         }
@@ -226,7 +240,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
                         else{break;}
             }
             for (int y2=y+1;y2<=7;y2++){ //w prawo
-                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_now){
+                        if (chessboard[x][y2].at(0)!='e' && chessboard[x][y2].at(0)!=who_is_my_color){
                             moves.push_back({x,y2});
                             break;
                         }
@@ -240,7 +254,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
 
                         y2--;
                         if (y2==-1 ||y2==8){break;}
-                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_is_my_color){
                             moves.push_back({x2,y2});
                             break;
                         }
@@ -253,7 +267,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
             for (int x2=x+1;x2<=7;x2++){ //lewo dol
                         y2--;
                         if (y2==-1 ||y2==8){break;}
-                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_is_my_color){
                             moves.push_back({x2,y2});
                             break;
                         }
@@ -266,7 +280,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
             for (int x2=x-1;x2>=0;x2--){ //lewo dol
                         y2++;
                         if (y2==-1 ||y2==8){break;}
-                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_is_my_color){
                             moves.push_back({x2,y2});
                             break;
                         }
@@ -279,7 +293,7 @@ std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char
             for (int x2=x+1;x2<=7;x2++){ //lewo dol
                         y2++;
                         if (y2==-1 ||y2==8){break;}
-                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_now){
+                        if (chessboard[x2][y2].at(0)!='e' && chessboard[x2][y2].at(0)!=who_is_my_color){
                             moves.push_back({x2,y2});
                             break;
                         }
@@ -334,7 +348,10 @@ void MainWindow::clearColors(){
 }
 void MainWindow::onAnyButtonClicked() {
     bool res=is_checked();
-    std::cout<<res<<" ";
+    if (res==true){
+        std::cout<<res<<"----------------------------------------";
+    }
+
     //std::cout<<who_now; //background-color: rgb(108, 82, 70);
     clearColors();
     bool change_frame_color=true;
@@ -394,7 +411,7 @@ void MainWindow::onAnyButtonClicked() {
             if (change_frame_color==true){
                     frame->setStyleSheet("background-color: rgb(144,238,144);");
                     changed_fields.push_back({x+'0',y+'0','w'});
-                    std::vector<std::array<int,2>> where=possibleMoves(x,y,chessboard[x][y].at(1),chessboard[x][y].at(0));
+                    std::vector<std::array<int,2>> where=possibleMoves(x,y,chessboard[x][y].at(1),chessboard[x][y].at(0),who_now);
                     possible_moves=where;
                     figure_choosen[0]=x+'0';
                     figure_choosen[1]=y+'0';
