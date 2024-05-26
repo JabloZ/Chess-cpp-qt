@@ -34,7 +34,8 @@ private:
     Ui::Chess *ui;
     void onAnyButtonClicked();
     void clearColors();
-    std::vector<std::array<int,2>> possibleMoves(int x,int y,char f,char c,char who_is_my_color);
+    std::vector<std::array<int,2>> possibleMoves(int x,int y,char f,char c,char who_is_my_color, std::string checked_chessboard[8][8]);
+    bool cancels_check(std::string chessboard_after_move[8][8]);
 
 };
 #endif // MAINWINDOW_H
