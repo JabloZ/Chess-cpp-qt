@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include <array>
+#include <QLabel>
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -22,15 +23,10 @@ int main(int argc, char *argv[])
 bool MainWindow::cancels_check(std::string chessboard_after_move[8][8]){
     int king_at[2];
     char who_is_my_color='0';
-    std::cout<<'\n';
+
     for (int ix=0;ix<=7;ix++){
         for (int jx=0;jx<=7;jx++){
-            if(chessboard_after_move[ix][jx]=="e"){
-                std::cout<<"ee ";
-            }
-            else{
-                std::cout<<chessboard_after_move[ix][jx]<<" ";
-            }
+
 
             if (chessboard_after_move[ix][jx]=="wK" && who_now=='w'){
                     king_at[0]=ix;
@@ -43,11 +39,11 @@ bool MainWindow::cancels_check(std::string chessboard_after_move[8][8]){
                     who_is_my_color='w';
             }
         }
-        std::cout<<'\n';
+
     }
     int moves_without_mate=0;
     std::vector<std::array<int,2>> all_moves={};
-    std::cout<<king_at[0]<<" "<<king_at[1]<<"<tu krol";
+
     std::array<int,2> cur={king_at[0],king_at[1]};
     for (int i=0;i<=7;i++){
         for (int j=0; j<=7;j++){
@@ -57,60 +53,48 @@ bool MainWindow::cancels_check(std::string chessboard_after_move[8][8]){
 
                 //z tego wynika ze krolowa w ruchach po tym niby nie ma ruchu na 7,4
                 if (std::find(where.begin(),where.end(),cur)!=where.end()){
-
-                    std::cout<<"dalej szach "<<king_at[0]<<" "<<king_at[1]<<"<tu krol";
-                    std::cout<<chessboard_after_move[i][j];
                     return true;
                 }
-                else{
-                    moves_without_mate+=1;
-                }
+
 
             }
 
         }
 
     }
-    std::cout<<"tu szacha nie bylo ;)";
+
     return false;
 }
 
-bool MainWindow::is_checked(){
-    std::vector<std::array<int,2>> all_moves={};
-    int king_at[2];
-    char who_is_my_color='0';
-    if (who_now=='w'){
-        king_at[0]=w_king_at[0];
-        king_at[1]=w_king_at[1];
-        who_is_my_color='b';
-    }
-    else{
-        who_is_my_color='w';
-        king_at[0]=b_king_at[0];
-        king_at[1]=b_king_at[1];
-    }
-
-
-    std::array<int,2> cur={king_at[0],king_at[1]};
-    for (int i=0;i<=7;i++){
-        for (int j=0; j<=7;j++){
-            if (chessboard[i][j].at(0)!='e' && chessboard[i][j].at(0)!=who_now){
-
-                std::vector<std::array<int,2>> where=possibleMoves(i,j,chessboard[i][j].at(1),chessboard[i][j].at(0),who_is_my_color,chessboard);
-
-
-                if (std::find(where.begin(),where.end(),cur)!=where.end()){
-
-                    return true;
-                }
-
-            }
-
+bool MainWindow::is_mate(){
+    std::string checked_chessboard[8][8]={};
+    for (int ib=0;ib<=7;ib++){
+        for (int jb=0; jb<=7; jb++){
+            checked_chessboard[ib][jb]=chessboard[ib][jb];
         }
-
     }
+    std::vector<std::array<int,2>> all_moves={};
+    std::vector<std::array<int,2>> copy_moves={};
+    for (int ix=0;ix<=7;ix++){
+        for (int jx=0;jx<=7;jx++){
+            if (chessboard[ix][jx].at(0)==who_now){
 
-    return false;
+                copy_moves=possibleMoves(ix,jx,chessboard[ix][jx].at(1),chessboard[ix][jx].at(0),who_now,checked_chessboard);
+                for (auto& itx:copy_moves){
+                    all_moves.push_back({itx[0],itx[1]});
+                }
+                copy_moves={};
+                all_moves=erase_wrong_movements(all_moves,ix,jx);
+                if (all_moves.empty()==false){
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+
+
+
 }
 std::vector<std::array<int,2>> MainWindow::possibleMoves(int x,int y,char f,char c, char who_is_my_color,std::string chessboard_kind[8][8]){
     std::vector<std::array<int,2>> moves;
@@ -424,8 +408,44 @@ void MainWindow::clearColors(){
         }
     }
 }
-void MainWindow::onAnyButtonClicked() {
 
+
+
+std::vector<std::array<int,2>> MainWindow::erase_wrong_movements(std::vector<std::array<int,2>> pos_mov, int x, int y){
+     std::vector<std::array<int,2>> to_remove={};
+    for (const auto& it : pos_mov) {
+
+        std::string chessboard_after_move[8][8]={};
+        for (int ix=0;ix<=7;ix++){
+            for (int jx=0;jx<=7;jx++){
+                chessboard_after_move[ix][jx]=chessboard[ix][jx];
+            }
+        }
+        chessboard_after_move[it[0]][it[1]]=chessboard[x][y];
+        chessboard_after_move[x][y]="e"; //TU MOZE BYC PROBLEM Z ROSZADA ALE WYJEBANE NARAZIE
+        if (cancels_check(chessboard_after_move)==true){
+            std::array<int,2> aa={it[0],it[1]};
+            to_remove.push_back({it[0],it[1]});
+        }
+
+    }
+    pos_mov.erase(
+            std::remove_if(pos_mov.begin(), pos_mov.end(),
+                           [&to_remove](const std::array<int, 2>& move) {
+                               return std::find(to_remove.begin(), to_remove.end(), move) != to_remove.end();
+                           }),
+            pos_mov.end()
+    );
+    return pos_mov;
+}
+
+
+
+
+void MainWindow::onAnyButtonClicked() {
+    if (game_ended==true){
+        return;
+    }
     //std::cout<<who_now; //background-color: rgb(108, 82, 70);
     clearColors();
     bool change_frame_color=true;
@@ -441,13 +461,17 @@ void MainWindow::onAnyButtonClicked() {
         if (figure_choosen[3]==who_now){
 
                 if (std::find(possible_moves.begin(), possible_moves.end(), cur) != possible_moves.end()) {
-
-                    std::cout<<"possible move";
                     std::string fname;
                     fname+=figure_choosen[3];
                     fname+=figure_choosen[2];
-
+                    if (figure_choosen[2]=='p' && who_now=='b' && x==7){
+                                fname="bq";
+                    }
+                    if (figure_choosen[2]=='p' && who_now=='w' && x==0){
+                                fname="wq";
+                    }
                     chessboard[x][y]=fname;
+
                     chessboard[figure_choosen[0]-'0'][figure_choosen[1]-'0']="e";
 
                     QString buttonName12 = QString("p%1%2").arg(x).arg(y);
@@ -467,6 +491,7 @@ void MainWindow::onAnyButtonClicked() {
 
                         }
 
+
                         who_now='b';
                     }
                     else{who_now='w';
@@ -479,7 +504,24 @@ void MainWindow::onAnyButtonClicked() {
                         figure_choosen[i]='0';
                     }
                    }
+        if (is_mate()==true){
+                    game_ended=true;
+                    if (who_now=='b'){
+                        std::cout<<"White has won";
+                        QString labelname_2 = "label_2";
+                        QLabel *label_2 = findChild<QLabel*>(labelname_2);
+                        label_2->setText(QString::fromStdString("White has won!"));
+                        return;
+                    }
+                    else{
+                        QString labelname_2 = "label_2";
+                        QLabel *label_2 = findChild<QLabel*>(labelname_2);
+                        label_2->setText(QString::fromStdString("Black has won!"));
+                        return;
+                    }
+                };
         }
+        int moves_without=0;
         if (chessboard[x][y].at(0)==who_now){
 
             QString frameName = QString("f%1%2").arg(x).arg(y);
@@ -490,35 +532,10 @@ void MainWindow::onAnyButtonClicked() {
                     char to_send='b';
                     if (who_now=='b'){to_send='w';}
                     std::vector<std::array<int,2>> where=possibleMoves(x,y,chessboard[x][y].at(1),chessboard[x][y].at(0),who_now,chessboard);
-                    possible_moves=where;
-                    std::vector<std::array<int,2>>to_remove={};
-                    for (const auto& it : possible_moves) {
-                        std::cout<<it[0]<<" "<<it[1]<<"|";
-                    }
-                    for (const auto& it : possible_moves) {
+                    std::vector<std::array<int,2>> possible_moves_c=where;
 
-                        std::cout<<'\N'<<it[0]<<" "<<it[1]<<"|"<<'\N';
-                        std::string chessboard_after_move[8][8]={};
-                        for (int ix=0;ix<=7;ix++){
-                            for (int jx=0;jx<=7;jx++){
-                                chessboard_after_move[ix][jx]=chessboard[ix][jx];
-                            }
-                        }
+                    possible_moves=erase_wrong_movements(possible_moves_c,x,y);
 
-                        chessboard_after_move[it[0]][it[1]]=chessboard[x][y];
-                        chessboard_after_move[x][y]="e"; //TU MOZE BYC PROBLEM Z ROSZADA ALE WYJEBANE NARAZIE
-                        if (cancels_check(chessboard_after_move)==true){
-                            std::array<int,2> aa={it[0],it[1]};
-                            to_remove.push_back({it[0],it[1]});
-                        }
-                    }
-                    possible_moves.erase(
-                        std::remove_if(possible_moves.begin(), possible_moves.end(),
-                                       [&to_remove](const std::array<int, 2>& move) {
-                                           return std::find(to_remove.begin(), to_remove.end(), move) != to_remove.end();
-                                       }),
-                        possible_moves.end()
-                        );
                     figure_choosen[0]=x+'0';
                     figure_choosen[1]=y+'0';
                     figure_choosen[2]=chessboard[x][y].at(1);

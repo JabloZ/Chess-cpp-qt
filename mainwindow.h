@@ -12,12 +12,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    bool game_ended=false;
     char who_now='w';
     char figure_choosen[4];
     std::vector<std::array<char,3>> changed_fields;
     std::vector<std::array<int,2>> possible_moves;
     int b_king_at[2]={0,4};
     int w_king_at[2]={7,4};
+    int moves_without_mate=0;
     std::string chessboard[8][8]={ {"br","bk","bb","bq","bK","bb","bk","br"},
                                     {"bp","bp","bp","bp","bp","bp","bp","bp"},
                                     {"e","e","e","e","e","e","e","e"},
@@ -31,6 +33,8 @@ public:
 
 private:
     bool is_checked();
+    bool is_mate();
+    std::vector<std::array<int,2>> erase_wrong_movements(std::vector<std::array<int,2>> pos_mov, int x, int y);
     Ui::Chess *ui;
     void onAnyButtonClicked();
     void clearColors();
