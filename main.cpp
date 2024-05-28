@@ -441,6 +441,7 @@ std::vector<std::array<int,2>> MainWindow::erase_wrong_movements(std::vector<std
 }
 
 
+
 void MainWindow::promotion(){
     if (waiting_for_promotion==true){
 

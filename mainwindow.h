@@ -34,7 +34,7 @@ public:
     ~MainWindow();
 
 private:
-
+    void initializeGame();
     bool is_checked();
     bool is_mate();
     void promotion();
