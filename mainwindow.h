@@ -13,10 +13,12 @@ class MainWindow : public QMainWindow
 
 public:
     bool game_ended=false;
+    bool waiting_for_promotion=false;
     char who_now='w';
     char figure_choosen[4];
     std::vector<std::array<char,3>> changed_fields;
     std::vector<std::array<int,2>> possible_moves;
+    int promoted_pawn_at[2]={8,8};
     int b_king_at[2]={0,4};
     int w_king_at[2]={7,4};
     int moves_without_mate=0;
@@ -32,8 +34,11 @@ public:
     ~MainWindow();
 
 private:
+
     bool is_checked();
     bool is_mate();
+    void promotion();
+    bool does_button_exist(QString buttonName);
     std::vector<std::array<int,2>> erase_wrong_movements(std::vector<std::array<int,2>> pos_mov, int x, int y);
     Ui::Chess *ui;
     void onAnyButtonClicked();

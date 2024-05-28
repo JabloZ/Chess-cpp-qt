@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
+
 bool MainWindow::cancels_check(std::string chessboard_after_move[8][8]){
     int king_at[2];
     char who_is_my_color='0';
@@ -440,10 +441,39 @@ std::vector<std::array<int,2>> MainWindow::erase_wrong_movements(std::vector<std
 }
 
 
+void MainWindow::promotion(){
+    if (waiting_for_promotion==true){
 
+        QPushButton *clickedButton3 = qobject_cast<QPushButton*>(sender());
+        QString buttonName = clickedButton3->objectName();
+        std::string pname=buttonName.toStdString();
+        std::string color="b";
+        if (who_now=='b'){
+            color="w";
+        }
+
+        std::string which_figure=color+static_cast<char>(tolower(pname.at(0)));
+        qDebug()<<QString::fromStdString(which_figure);
+        qDebug()<<promoted_pawn_at[0]<<promoted_pawn_at[1];
+        chessboard[promoted_pawn_at[0]][promoted_pawn_at[1]]=which_figure;
+
+        QString buttonName12 = QString("p%1%2").arg(promoted_pawn_at[0]).arg(promoted_pawn_at[1]);
+        QPushButton *buttonc = findChild<QPushButton*>(buttonName12);
+        buttonc->setText(QString::fromStdString(which_figure));
+
+        QString framename="promotion_frame";
+        QFrame *frame_to_edit=findChild<QFrame*>(framename);
+        frame_to_edit->setVisible(false);
+        waiting_for_promotion=false;
+        }
+}
 
 void MainWindow::onAnyButtonClicked() {
     if (game_ended==true){
+        return;
+    }
+    if (waiting_for_promotion==true){
+        qDebug()<<"tutaj sie zajebalem";
         return;
     }
     //std::cout<<who_now; //background-color: rgb(108, 82, 70);
@@ -451,6 +481,7 @@ void MainWindow::onAnyButtonClicked() {
     bool change_frame_color=true;
     QPushButton *clickedButton = qobject_cast<QPushButton*>(sender());
     if (clickedButton) {
+
         QString buttonName = clickedButton->objectName();
         std::string pname=buttonName.toStdString();
         int x=pname.at(1)-'0';
@@ -465,10 +496,23 @@ void MainWindow::onAnyButtonClicked() {
                     fname+=figure_choosen[3];
                     fname+=figure_choosen[2];
                     if (figure_choosen[2]=='p' && who_now=='b' && x==7){
-                                fname="bq";
+                                promoted_pawn_at[0]=x;
+                                promoted_pawn_at[1]=y;
+
+                                waiting_for_promotion=true;
+                                QString framename="promotion_frame";
+                                QFrame *frame_to_edit=findChild<QFrame*>(framename);
+                                frame_to_edit->setVisible(true);
                     }
                     if (figure_choosen[2]=='p' && who_now=='w' && x==0){
-                                fname="wq";
+                                waiting_for_promotion=true;
+                                QString framename="promotion_frame";
+                                QFrame *frame_to_edit=findChild<QFrame*>(framename);
+                                frame_to_edit->setVisible(true);
+                                promoted_pawn_at[0]=x;
+                                promoted_pawn_at[1]=y;
+
+
                     }
                     chessboard[x][y]=fname;
 

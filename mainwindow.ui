@@ -3084,7 +3084,7 @@ background-color: rgb(108, 82, 70);</string>
      <rect>
       <x>610</x>
       <y>9</y>
-      <width>371</width>
+      <width>378</width>
       <height>600</height>
      </rect>
     </property>
@@ -3117,21 +3117,143 @@ color: rgb(6, 6, 6);</string>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>TextLabel</string>
+      <widget class="QFrame" name="promotion_frame">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>100</height>
+        </size>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 238, 238);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QPushButton" name="queenbutton">
+          <property name="styleSheet">
+           <string notr="true">font: 16pt &quot;Segoe UI&quot;;
+color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="text">
+           <string>Queen</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="knightbutton">
+          <property name="styleSheet">
+           <string notr="true">font: 16pt &quot;Segoe UI&quot;;
+color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="text">
+           <string>Knight</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bishopbutton">
+          <property name="styleSheet">
+           <string notr="true">font: 16pt &quot;Segoe UI&quot;;
+color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="text">
+           <string>Bishop</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="rookbutton">
+          <property name="styleSheet">
+           <string notr="true">font: 16pt &quot;Segoe UI&quot;;
+color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="text">
+           <string>Rook</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label">
-       <property name="styleSheet">
-        <string notr="true">color: rgb(0, 0, 0);
-font: 28pt &quot;Segoe UI&quot;;</string>
+      <widget class="QFrame" name="game_pannel">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>100</height>
+        </size>
        </property>
-       <property name="text">
-        <string/>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
        </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QPushButton" name="button1v1">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(0, 0, 0);
+font: 14pt &quot;Segoe UI&quot;;</string>
+          </property>
+          <property name="text">
+           <string>1v1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonvsbot">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(0, 0, 0);
+font: 14pt &quot;Segoe UI&quot;;</string>
+          </property>
+          <property name="text">
+           <string>vs bot</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonrestart">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">color: rgb(0, 0, 0);
+font: 14pt &quot;Segoe UI&quot;;</string>
+          </property>
+          <property name="text">
+           <string>restart</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
